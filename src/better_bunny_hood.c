@@ -180,71 +180,64 @@ RECOMP_HOOK("KaleidoScope_DrawMaskSelect") void DrawEquipSquare(PlayState* play)
     static Vtx* persistentMasksVtx;
 
     if (BunnyHoodMode_IsEnabled) {
-            GraphicsContext* gfxCtx = play->state.gfxCtx;
-            PauseContext* pauseCtx = &play->pauseCtx;
-            s16 i = 0;
-            s16 j = 0;
-            s16 k;
+        GraphicsContext* gfxCtx = play->state.gfxCtx;
+        PauseContext* pauseCtx = &play->pauseCtx;
+        s16 i = 0;
+        s16 j = 0;
+        s16 k;
 
-            OPEN_DISPS(gfxCtx);
+        OPEN_DISPS(gfxCtx);
 
-            persistentMasksVtx = (Vtx*)GRAPH_ALLOC(gfxCtx, (4 * 4) * sizeof(Vtx));
+        persistentMasksVtx = (Vtx*)GRAPH_ALLOC(gfxCtx, (4 * 4) * sizeof(Vtx));
 
-            if (pauseCtx->state == PAUSE_STATE_MAIN) {
-                s16 slot = SLOT_MASK_BUNNY - ITEM_NUM_SLOTS;
-                s16 slotX = slot % MASK_GRID_COLS;
-                s16 slotY = slot / MASK_GRID_COLS;
-                s16 initialX = 0 - (MASK_GRID_COLS * MASK_GRID_CELL_WIDTH) / 2;
-                s16 initialY = (MASK_GRID_ROWS * MASK_GRID_CELL_HEIGHT) / 2 - 6;
-                s16 vtxX = (initialX + (slotX * MASK_GRID_CELL_WIDTH)) + MASK_GRID_QUAD_MARGIN;
-                s16 vtxY = (initialY - (slotY * MASK_GRID_CELL_HEIGHT)) + pauseCtx->offsetY - MASK_GRID_QUAD_MARGIN;
-                persistentMasksVtx[i + 0].v.ob[0] = persistentMasksVtx[i + 2].v.ob[0] =
-                    vtxX + MASK_GRID_SELECTED_QUAD_MARGIN;
-                persistentMasksVtx[i + 1].v.ob[0] = persistentMasksVtx[i + 3].v.ob[0] =
-                    persistentMasksVtx[i + 0].v.ob[0] + MASK_GRID_SELECTED_QUAD_WIDTH;
-                persistentMasksVtx[i + 0].v.ob[1] = persistentMasksVtx[i + 1].v.ob[1] =
-                    vtxY - MASK_GRID_SELECTED_QUAD_MARGIN;
+        if (pauseCtx->state == PAUSE_STATE_MAIN) {
+            s16 slot = SLOT_MASK_BUNNY - ITEM_NUM_SLOTS;
+            s16 slotX = slot % MASK_GRID_COLS;
+            s16 slotY = slot / MASK_GRID_COLS;
+            s16 initialX = 0 - (MASK_GRID_COLS * MASK_GRID_CELL_WIDTH) / 2;
+            s16 initialY = (MASK_GRID_ROWS * MASK_GRID_CELL_HEIGHT) / 2 - 6;
+            s16 vtxX = (initialX + (slotX * MASK_GRID_CELL_WIDTH)) + MASK_GRID_QUAD_MARGIN;
+            s16 vtxY = (initialY - (slotY * MASK_GRID_CELL_HEIGHT)) + pauseCtx->offsetY - MASK_GRID_QUAD_MARGIN;
+            persistentMasksVtx[i + 0].v.ob[0] = persistentMasksVtx[i + 2].v.ob[0] =
+                vtxX + MASK_GRID_SELECTED_QUAD_MARGIN;
+            persistentMasksVtx[i + 1].v.ob[0] = persistentMasksVtx[i + 3].v.ob[0] =
+                persistentMasksVtx[i + 0].v.ob[0] + MASK_GRID_SELECTED_QUAD_WIDTH;
+            persistentMasksVtx[i + 0].v.ob[1] = persistentMasksVtx[i + 1].v.ob[1] =
+                vtxY - MASK_GRID_SELECTED_QUAD_MARGIN;
 
-                persistentMasksVtx[i + 2].v.ob[1] = persistentMasksVtx[i + 3].v.ob[1] =
-                    persistentMasksVtx[i + 0].v.ob[1] - MASK_GRID_SELECTED_QUAD_HEIGHT;
+            persistentMasksVtx[i + 2].v.ob[1] = persistentMasksVtx[i + 3].v.ob[1] =
+                persistentMasksVtx[i + 0].v.ob[1] - MASK_GRID_SELECTED_QUAD_HEIGHT;
 
-                persistentMasksVtx[i + 0].v.ob[2] = persistentMasksVtx[i + 1].v.ob[2] =
-                    persistentMasksVtx[i + 2].v.ob[2] = persistentMasksVtx[i + 3].v.ob[2] = 0;
+            persistentMasksVtx[i + 0].v.ob[2] = persistentMasksVtx[i + 1].v.ob[2] =
+                persistentMasksVtx[i + 2].v.ob[2] = persistentMasksVtx[i + 3].v.ob[2] = 0;
 
-                persistentMasksVtx[i + 0].v.flag = persistentMasksVtx[i + 1].v.flag = persistentMasksVtx[i + 2].v.flag =
-                    persistentMasksVtx[i + 3].v.flag = 0;
+            persistentMasksVtx[i + 0].v.flag = persistentMasksVtx[i + 1].v.flag = persistentMasksVtx[i + 2].v.flag =
+                persistentMasksVtx[i + 3].v.flag = 0;
 
-                persistentMasksVtx[i + 0].v.tc[0] = persistentMasksVtx[i + 0].v.tc[1] =
-                    persistentMasksVtx[i + 1].v.tc[1] = persistentMasksVtx[i + 2].v.tc[0] = 0;
+            persistentMasksVtx[i + 0].v.tc[0] = persistentMasksVtx[i + 0].v.tc[1] =
+                persistentMasksVtx[i + 1].v.tc[1] = persistentMasksVtx[i + 2].v.tc[0] = 0;
 
-                persistentMasksVtx[i + 1].v.tc[0] = persistentMasksVtx[i + 2].v.tc[1] =
-                    persistentMasksVtx[i + 3].v.tc[0] = persistentMasksVtx[i + 3].v.tc[1] =
-                        MASK_GRID_SELECTED_QUAD_TEX_SIZE * (1 << 5);
+            persistentMasksVtx[i + 1].v.tc[0] = persistentMasksVtx[i + 2].v.tc[1] =
+                persistentMasksVtx[i + 3].v.tc[0] = persistentMasksVtx[i + 3].v.tc[1] =
+                    MASK_GRID_SELECTED_QUAD_TEX_SIZE * (1 << 5);
 
-                persistentMasksVtx[i + 0].v.cn[0] = persistentMasksVtx[i + 1].v.cn[0] =
-                    persistentMasksVtx[i + 2].v.cn[0] = persistentMasksVtx[i + 3].v.cn[0] =
-                        persistentMasksVtx[i + 0].v.cn[1] = persistentMasksVtx[i + 1].v.cn[1] =
-                            persistentMasksVtx[i + 2].v.cn[1] = persistentMasksVtx[i + 3].v.cn[1] =
-                                persistentMasksVtx[i + 0].v.cn[2] = persistentMasksVtx[i + 1].v.cn[2] =
-                                    persistentMasksVtx[i + 2].v.cn[2] = persistentMasksVtx[i + 3].v.cn[2] = 255;
+            persistentMasksVtx[i + 0].v.cn[0] = persistentMasksVtx[i + 1].v.cn[0] =
+                persistentMasksVtx[i + 2].v.cn[0] = persistentMasksVtx[i + 3].v.cn[0] =
+                    persistentMasksVtx[i + 0].v.cn[1] = persistentMasksVtx[i + 1].v.cn[1] =
+                        persistentMasksVtx[i + 2].v.cn[1] = persistentMasksVtx[i + 3].v.cn[1] =
+                            persistentMasksVtx[i + 0].v.cn[2] = persistentMasksVtx[i + 1].v.cn[2] =
+                                persistentMasksVtx[i + 2].v.cn[2] = persistentMasksVtx[i + 3].v.cn[2] = 255;
 
-                persistentMasksVtx[i + 0].v.cn[3] = persistentMasksVtx[i + 1].v.cn[3] =
-                    persistentMasksVtx[i + 2].v.cn[3] = persistentMasksVtx[i + 3].v.cn[3] = pauseCtx->alpha;
-        for (i = 0, j = MASK_NUM_SLOTS * 4; i < 3; i++, j += 4) {
-            if (GET_CUR_FORM_BTN_ITEM(i + 1) != ITEM_NONE) {
-                if (GET_CUR_FORM_BTN_SLOT(i + 1) < ITEM_NUM_SLOTS) {
-                    gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 200, 255, 255);
-                    gSPVertex(POLY_OPA_DISP++, (uintptr_t)persistentMasksVtx, 4, 0);
-                    POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, (TexturePtr)gEquippedItemOutlineTex, 32, 32, 0);
-                }
-            }
+            persistentMasksVtx[i + 0].v.cn[3] = persistentMasksVtx[i + 1].v.cn[3] =
+                persistentMasksVtx[i + 2].v.cn[3] = persistentMasksVtx[i + 3].v.cn[3] = pauseCtx->alpha;
+                gDPSetPrimColor(POLY_OPA_DISP++, 0, 0, 100, 200, 255, 255);
+                gSPVertex(POLY_OPA_DISP++, (uintptr_t)persistentMasksVtx, 4, 0);
+                POLY_OPA_DISP = Gfx_DrawTexQuadIA8(POLY_OPA_DISP, (TexturePtr)gEquippedItemOutlineTex, 32, 32, 0);
+
+            gDPPipeSync(POLY_OPA_DISP++);
         }
-
-        gDPPipeSync(POLY_OPA_DISP++);
-
         CLOSE_DISPS(play->state.gfxCtx);
     }
-}
 }
 
 // Equip/unequip Bunny Hood and play equip/cancel sfx on A press
